@@ -1,0 +1,78 @@
+generated: '2026-08-08'
+method: probed
+source: live DNS/TLS/HTTP probes of every Brisk Health host found during enrichment
+note: >-
+  Scoped to domains Brisk Health controls. The mechanical probe also walked
+  dev.wix.com / wix.com because the Wix Site MCP documentation is the only human
+  URL for the site's MCP surface; those are Wix's domains, not Brisk Health's, and
+  have been removed so this artifact describes only the provider.
+hosts:
+- host: www.briskhealthurgentcare.com
+  role: live marketing site (only reachable Brisk Health web property)
+  http_status: 200
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep  6 01:16:14 2026 GMT
+  cert_valid: true
+  hsts: true
+  hsts_max_age: 31556952
+- host: briskhealth.com
+  role: primary brand domain — parked / misconfigured
+  http_status: 404
+  http_body: Wix "ConnectYourDomain Error" page
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 28 11:02:37 2026 GMT
+  cert_valid: true
+  hsts: false
+- host: brisk.health
+  role: mobile-app landing domain (linked from the marketing site) — dead
+  http_status: 404
+  http_body: Wix "ConnectYourDomain Error" page
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Mar 27 05:04:50 2026 GMT
+  cert_valid: false
+  cert_note: >-
+    Certificate expired 2026-03-27 and has not been renewed; a default TLS client
+    refuses the connection outright.
+  hsts: false
+domains:
+- domain: briskhealthurgentcare.com
+  dnssec: true
+  caa: []
+  spf: false
+  dmarc: false
+- domain: briskhealth.com
+  dnssec: false
+  caa: []
+  spf: true
+  spf_record: v=spf1 include:_spf.mlsend.com include:_spf.enguard.com -all
+  dmarc: true
+  dmarc_policy: invalid-multiple-records
+  dmarc_note: >-
+    Two conflicting DMARC TXT records are published at _dmarc.briskhealth.com —
+    one "p=none" carrying unedited template placeholders
+    (rua/ruf pointing at dmarc-reports@yourdomain.com) and one "p=reject". Per
+    RFC 7489 6.6.3 a receiver that finds more than one DMARC record discards the
+    policy entirely, so this domain is effectively unprotected despite appearing
+    to publish a reject policy.
+- domain: brisk.health
+  dnssec: false
+  caa: []
+  spf: true
+  spf_record: v=spf1 include:_spf.google.com ~all
+  dmarc: true
+  dmarc_policy: none
+findings:
+- id: expired-tls-cert
+  host: brisk.health
+  severity: high
+  detail: TLS certificate expired 2026-03-27; the app landing domain is unusable over HTTPS.
+- id: dmarc-multiple-records
+  domain: briskhealth.com
+  severity: medium
+  detail: Duplicate DMARC records void the policy; one still contains template placeholders.
+- id: no-caa
+  severity: low
+  detail: No CAA records on any Brisk Health domain, so certificate issuance is unrestricted.

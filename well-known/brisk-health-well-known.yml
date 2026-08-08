@@ -1,0 +1,77 @@
+generated: '2026-08-08'
+method: probed
+source: live GET of the /.well-known/ discovery surface on every Brisk Health host
+summary: >-
+  No .well-known document is published on any Brisk Health host. All three hosts
+  are Wix-served; the live marketing site answers 400 for every /.well-known/*
+  path, and the two parked domains answer 404. Two non-well-known discovery
+  documents DO exist on the live host and were harvested: a Wix-generated
+  llms.txt and the Wix Site MCP endpoint it advertises.
+hosts:
+- host: www.briskhealthurgentcare.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 400
+  - path: /.well-known/openid-configuration
+    status: 400
+  - path: /.well-known/oauth-authorization-server
+    status: 400
+  - path: /.well-known/api-catalog
+    status: 400
+  - path: /.well-known/ai-plugin.json
+    status: 400
+  - path: /.well-known/agent-card.json
+    status: 400
+  - path: /.well-known/agent.json
+    status: 400
+  other_discovery:
+  - path: /llms.txt
+    status: 200
+    file: ../llms/brisk-health-llms.txt
+    note: Wix-generated; advertises the site MCP endpoint.
+  - path: /robots.txt
+    status: 200
+  - path: /sitemap.xml
+    status: 200
+    note: Sitemap index resolves to pages-sitemap.xml listing exactly two URLs (home, about).
+  - path: /_api/mcp
+    status: 200
+    file: ../mcp/brisk-health-mcp.yml
+    note: Wix Site MCP; JSON-RPC tools/list answers anonymously with 9 tools.
+- host: briskhealth.com
+  note: Primary brand domain; Wix "ConnectYourDomain Error" page on every path.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: brisk.health
+  note: >-
+    Mobile-app landing domain linked from the marketing site. TLS certificate
+    expired 2026-03-27; probed with verification disabled. Same Wix
+    "ConnectYourDomain Error" page on every path.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404

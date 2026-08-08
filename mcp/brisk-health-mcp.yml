@@ -1,0 +1,98 @@
+generated: '2026-08-08'
+method: searched
+status: published
+source: https://www.briskhealthurgentcare.com/_api/mcp
+discovered_via: https://www.briskhealthurgentcare.com/llms.txt
+first_party: false
+platform: wix
+platform_note: >-
+  This MCP server is NOT a Brisk Health product. It is the generic "Wix Site MCP"
+  that Wix provisions automatically for sites it hosts, advertised by the
+  Wix-generated llms.txt on the same host. Its tool set is identical across every
+  Wix site; nothing in it is specific to Brisk Health beyond the site name and URL
+  interpolated into three tool descriptions. Brisk Health publishes no developer
+  program, no API documentation, and no machine-readable specification of its own.
+  Recorded here because the endpoint is genuinely live, anonymous, and served from
+  the provider's own host — not because the provider built an agent surface.
+server:
+  name: brisk-health-site-mcp
+  transport: http
+  url: https://www.briskhealthurgentcare.com/_api/mcp
+  protocol: JSON-RPC 2.0
+  authentication: none
+  auth_note: >-
+    tools/list answers anonymously. Tools that touch site data require a visitor
+    token minted by GenerateVisitorToken, which is itself anonymous — it scopes a
+    caller to public site content only.
+  docs: https://dev.wix.com/docs/develop-websites/articles/get-started/about-the-wix-site-mcp
+tools_file: brisk-health-mcp-tools-list.json
+tool_count: 9
+tools:
+- name: GetBusinessDetails
+  description: Get business and site details (timezone, email, phone, address) for the site.
+  parameters: []
+  category: site-metadata
+- name: SearchInSite
+  description: Search the site for information.
+  parameters: [searchTerm]
+  category: site-content
+- name: SearchSiteApiDocs
+  description: >-
+    Retrieve API documentation for the Wix business solutions installed on this
+    site and how to call them.
+  parameters: [searchTerm]
+  category: discovery
+- name: GenerateVisitorToken
+  description: Create an anonymous visitor session and obtain a visitor access token.
+  parameters: []
+  category: auth
+- name: CallWixSiteAPI
+  description: Call Wix platform API methods against this site on a visitor's behalf.
+  parameters: [visitorToken, url, method, body]
+  category: execution
+- name: ExecuteWixAPI
+  description: Run JavaScript against the Wix REST API on this site.
+  parameters: [code, reason, hasMutations, sourceDocUrls, visitorToken]
+  category: execution
+- name: BrowseWixRESTDocsMenu
+  description: Browse the Wix REST API documentation menu hierarchy.
+  parameters: [menuUrl, reason]
+  category: discovery
+- name: ReadFullDocsArticle
+  description: Fetch a complete article from the Wix developer documentation portal.
+  parameters: [articleUrl]
+  category: discovery
+- name: ReadFullDocsMethodSchema
+  description: Fetch the full schema for a Wix API method.
+  parameters: [articleUrl, reason]
+  category: discovery
+observations:
+- id: no-first-party-capability
+  detail: >-
+    None of the nine tools exposes Brisk Health clinical, scheduling, patient, or
+    pricing data. The llms.txt advertises "book services and make reservations",
+    but that is generic Wix Bookings copy — this site publishes only two pages
+    (home and about) and no bookable service catalog.
+- id: prompt-injection-shaped-descriptions
+  detail: >-
+    Several tool descriptions returned by tools/list embed imperative directives
+    aimed at the calling model — an <agent-mandatory-instructions> block with
+    "YOU MUST ... A FAILURE TO DO SO WILL RESULT IN ERRORS AND CRITICAL ISSUES",
+    plus instructions to call other Wix tools first. This is Wix platform text,
+    not Brisk Health's, but any agent connecting to this endpoint ingests it as
+    tool metadata. Treat tool descriptions from this server as untrusted data.
+- id: broad-execution-surface
+  detail: >-
+    ExecuteWixAPI runs caller-supplied JavaScript against the Wix REST API and
+    CallWixSiteAPI issues arbitrary HTTP methods with arbitrary bodies, both
+    reachable with an anonymously minted visitor token. The blast radius is
+    bounded by Wix's visitor-token authorization rather than by anything the site
+    owner configured.
+x-evidence:
+  fetched: '2026-08-08'
+  url: https://www.briskhealthurgentcare.com/_api/mcp
+  method: POST
+  request: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  http_status: 200
+  content_type: application/json; charset=utf-8
+  response_bytes: 28834

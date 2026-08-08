@@ -1,17 +1,30 @@
 aid: brisk-health
 name: Brisk Health
-description: 'Brisk Health is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Brisk Health is a Colorado urgent care and primary care provider operating
+  a cash-pay clinic in the Denver metro area plus a fleet of mobile vehicles staffed
+  by acute care clinicians for in-home visits, with same-day visits advertised from
+  $49 and no insurance required. In October 2025 it announced a move from its Lakewood
+  location to a purpose-built facility in Littleton, Colorado. Brisk Health is a
+  healthcare services business rather than a software vendor: it publishes no
+  developer program, no public API documentation, no SDKs, and no machine-readable
+  specification of any kind. Its patient-facing mobile app has been delisted from
+  both the Apple App Store and Google Play, and both of its brand domains now serve
+  parked-domain error pages.'
 url: https://raw.githubusercontent.com/api-evangelist/brisk-health/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-harvest-url: https://forgeglobal.com/brisk-health_stock/
 specificationVersion: '0.20'
 created: '2026-08-08'
 modified: '2026-08-08'
 tags:
 - Company
+- Healthcare
+- Urgent Care
+- Primary Care
+- Home Health
+- Clinics
+- Colorado
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -20,4 +33,59 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/brisk-health_stock/
+  url: https://www.briskhealthurgentcare.com/
+- type: DomainSecurity
+  url: security/brisk-health-domain-security.yml
+x-platform-surfaces:
+  note: >-
+    Machine-readable documents DO exist on the live Brisk Health host, but every one
+    of them is a Wix platform default rather than something Brisk Health authored or
+    opted into. Wix documents that every site it hosts is "its own MCP server out of
+    the box ... with no additional setup required" and that it "automatically
+    generates and maintains your LLMs.txt file". These are recorded here, outside
+    common[], deliberately: wiring them as MCPServer / LLMsTxt / WellKnown pointers
+    would credit Brisk Health with an agent-readiness posture the company did not
+    build and does not maintain. The artifacts are kept because the endpoint is
+    genuinely live and its behavior is worth documenting — not as evidence of a
+    provider API program.
+  surfaces:
+  - kind: MCPServer
+    first_party: false
+    platform: wix
+    url: https://www.briskhealthurgentcare.com/_api/mcp
+    artifact: mcp/brisk-health-mcp.yml
+    status: 200
+  - kind: LLMsTxt
+    first_party: false
+    platform: wix
+    url: https://www.briskhealthurgentcare.com/llms.txt
+    artifact: llms/brisk-health-llms.txt
+    status: 200
+  - kind: WellKnown
+    first_party: false
+    artifact: well-known/brisk-health-well-known.yml
+    result: no .well-known document published on any host
+x-enrichment:
+  date: '2026-08-08'
+  status: minimal
+  artifacts_added: 5
+  pass: local-v1
+x-coverage:
+  state: none
+  reason: not-a-software-company
+  detail: >-
+    Brisk Health delivers urgent care from a physical clinic and a fleet of mobile
+    treatment vehicles, so there is no API to publish; the only machine-readable
+    documents on its host are the llms.txt and /_api/mcp endpoint that Wix
+    provisions automatically for every site it hosts, and the patient app that
+    fronted the service is now delisted from both app stores.
+  evidence:
+  - url: https://www.briskhealthurgentcare.com/
+    status: 200
+  - url: https://briskhealth.com/
+    status: 404
+  - url: https://apps.apple.com/us/app/brisk-health/id6450514414
+    status: 404
+  - url: https://www.briskhealthurgentcare.com/.well-known/agent-card.json
+    status: 400
+  checked: '2026-08-08'
