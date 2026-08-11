@@ -32,6 +32,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/brisk-health-mcp-tools-list.json
 - type: Website
   url: https://www.briskhealthurgentcare.com/
 - type: DomainSecurity
