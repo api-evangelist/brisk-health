@@ -11,6 +11,9 @@ description: 'Brisk Health is a Colorado urgent care and primary care provider o
   both the Apple App Store and Google Play, and both of its brand domains now serve
   parked-domain error pages.'
 url: https://raw.githubusercontent.com/api-evangelist/brisk-health/refs/heads/main/apis.yml
+x-api-posture: no-product-api
+x-api-posture-basis: observed
+x-api-posture-note: "Brisk Health is a healthcare services business rather than a software vendor: it publishes no developer program, no public API documentation, no SDKs, and no machine-readable specification of any kind"
 x-type: company
 x-source: harvest:secondary-market
 x-harvest-url: https://forgeglobal.com/brisk-health_stock/
